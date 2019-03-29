@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  SubnetID:
+    Type: AWS::EC2::Subnet::Id
+    Description: Subnet to deploy EC2 instance into
+  SecurityGroupIDs:
+    Type: List<AWS::EC2::SecurityGroup::Id>
+    Description: List of Security Groups to add to EC2 instance
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+  CreationDate:
+    Description: Enter today's Date for tagging purposes
+    Type: Date
+    Default: $(date)
+Mappings:
+  AWSRegionToAMI:
+    us-east-1:
+      AMIID: ami-0fbe919e06f97301e
+    us-east-2:
+      AMIID: ami-0fbe919e06f97301e
+Resources:
+#First WebAppStackInstance
+  EC2Instance:
+    Type: AWS::EC2::Instance                     
+    Properties:
+      ImageId:
+        !FindInMap                                 # This is an example of the short form YAML FindInMap function
+          - AWSRegionToAMI                         # It accepts three parameters each denoted by a hyphen (-)
+          - !Ref AWS::Region
+          - AMIID
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      SecurityGroupIds: !Ref SecurityGroupIDs
+      SubnetId: !Ref SubnetID
+     
+      Tags:                                      # Tags are an example of a sequence of mappings in YAML,
+        -                                        # each key/value pair is separated by a hyphen
+          Key: Name
+          Value: WebAppStack-ONE      
+        -
+          Key: Environment
+          Value: Development
+        -
+          Key: CreatedBy
+          Value: Brian Keith
+        - 
+          Key: CreatedDate
+          Value: !Ref CreationDate
+        - 
+          Key: purpose
+          Value: WebAppStack first instance

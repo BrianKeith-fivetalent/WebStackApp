@@ -106,19 +106,21 @@ Resources:
 
 # Add an Application Load Balancer
   elbWebAppStack:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
-      SubnetMappings:
-        - AllocationId: !GetAtt 
-            - FirstEIP
-            - AllocationId
-          SubnetId: !Ref SubnetIDA
-        - AllocationId: !GetAtt 
-            - SecondEIP
-            - AllocationId
-          SubnetId: !Ref SubnetIDB
-      Type: !Ref ELBType
-      IpAddressType: Ipv4
+      Instances: 
+        - Ref: EC2InstanceA
+        - Ref: EC2InstanceB
+      Listeners:
+      - LoadBalancerPort: '80'
+        InstancePort: '80'
+        Protocol: HTTP
+    HealthCheck:
+      Target: HTTP:80/
+      HealthyThreshold: '3'
+      UnhealthyThreshold: '5'
+      Interval: '30'
+      Timeout: '5'
       Tags:                                      # Tags are an example of a sequence of mappings in YAML,
         -                                        # each key/value pair is separated by a hyphen
           Key: Name
@@ -137,13 +139,6 @@ Resources:
           Value: WebAppStack Load Balancer
 
 
-  FirstEIP:
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-  SecondEIP:
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
+ 
     
  

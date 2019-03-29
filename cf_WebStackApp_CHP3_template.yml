@@ -1,4 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
+#
+#
+#
+#
+# Description: This CF will create two EC2 instances and a Load Balancer
+#
+
 Parameters:
   SubnetIDA:
     Type: AWS::EC2::Subnet::Id
@@ -20,12 +27,19 @@ Parameters:
     Description: Enter today's Date for tagging purposes
     Type: String
     Default: $(date)
+  ELBType:
+    Description: The type of Elastic  LoadBalancer
+    Type: String
+    Default: application
+ 
+
 Mappings:
   AWSRegionToAMI:
     us-east-1:
       AMIID: ami-0fbe919e06f97301e
     us-east-2:
       AMIID: ami-0fbe919e06f97301e
+
 Resources:
 
 #First WebAppStackInstance
@@ -56,7 +70,7 @@ Resources:
           Key: CreatedDate
           Value: !Ref CreationDate
         - 
-          Key: purpose
+          Key: Purpose
           Value: WebAppStack first instance
 
 #Second WebAppStackInstance
@@ -87,5 +101,32 @@ Resources:
           Key: CreatedDate
           Value: !Ref CreationDate
         - 
-          Key: purpose
+          Key: Purpose
           Value: WebAppStack second instance
+
+# Add an Application Load Balancer
+Parameters:
+
+Resources:
+  elb_WebAppStack:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      SubnetMappings:
+        - AllocationId: !GetAtt 
+            - FirstEIP
+            - AllocationId
+          SubnetId: !Ref SubnetIDA
+        - AllocationId: !GetAtt 
+            - SecondEIP
+            - AllocationId
+          SubnetId: !Ref SubnetIDB
+      Type: !Ref ELBType
+      IpAddressType: Ipv4
+  FirstEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  SecondEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc

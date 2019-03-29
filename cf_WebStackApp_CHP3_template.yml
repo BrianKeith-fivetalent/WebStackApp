@@ -29,7 +29,7 @@ Mappings:
 Resources:
 
 #First WebAppStackInstance
-  EC2Instance:
+  EC2InstanceA:
     Type: AWS::EC2::Instance                     
     Properties:
       ImageId:
@@ -60,7 +60,7 @@ Resources:
           Value: WebAppStack first instance
 
 #Second WebAppStackInstance
-  EC2Instance:
+  EC2InstanceB:
     Type: AWS::EC2::Instance                     
     Properties:
       ImageId:

@@ -15,7 +15,7 @@ Parameters:
     Default: t2.micro
   CreationDate:
     Description: Enter today's Date for tagging purposes
-    Type: Date
+    Type: String
     Default: $(date)
 Mappings:
   AWSRegionToAMI:

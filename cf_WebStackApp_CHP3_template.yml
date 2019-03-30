@@ -108,6 +108,8 @@ Resources:
   elbWebAppStack:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
+      AvailabilityZones:
+        Fn::GetAZs: ''
       Instances: 
         - Ref: EC2InstanceA
         - Ref: EC2InstanceB
@@ -115,28 +117,28 @@ Resources:
       - LoadBalancerPort: '80'
         InstancePort: '80'
         Protocol: HTTP
-    HealthCheck:
-      Target: HTTP:80/
-      HealthyThreshold: '3'
-      UnhealthyThreshold: '5'
-      Interval: '30'
-      Timeout: '5'
-      Tags:                                      # Tags are an example of a sequence of mappings in YAML,
-        -                                        # each key/value pair is separated by a hyphen
-          Key: Name
-          Value: elbWebAppStack     
-        -
-          Key: Environment
-          Value: Development
-        -
-          Key: CreatedBy
-          Value: Brian Keith
-        - 
-          Key: CreatedDate
-          Value: !Ref CreationDate
-        - 
-          Key: Purpose
-          Value: WebAppStack Load Balancer
+      HealthCheck:
+        Target: HTTP:80/
+        HealthyThreshold: '3'
+        UnhealthyThreshold: '5'
+        Interval: '30'
+        Timeout: '5'
+      # Tags:                                      # Tags are an example of a sequence of mappings in YAML,
+      #   -                                        # each key/value pair is separated by a hyphen
+      #     Key: Name
+      #     Value: elbWebAppStack     
+      #   -
+      #     Key: Environment
+      #     Value: Development
+      #   -
+      #     Key: CreatedBy
+      #     Value: Brian Keith
+      #   - 
+      #     Key: CreatedDate
+      #     Value: !Ref CreationDate
+      #   - 
+      #     Key: Purpose
+      #     Value: WebAppStack Load Balancer
 
 
  

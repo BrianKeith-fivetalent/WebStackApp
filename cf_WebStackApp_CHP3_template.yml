@@ -145,12 +145,12 @@ Resources:
     Properties:
       DBInstanceClass: db.t2.micro
       Engine: MySQL
-      DBSecurityGroups: !Ref SecurityGroupIDs
+      DBSecurityGroups: !Ref: DBSecurityGroup
       AllocatedStorage: '5'
       MasterUsername: MyName
       MasterUserPassword: MyPassword
       MultiAZ: true
-    Tags:                                      # Tags are an example of a sequence of mappings in YAML,
+      Tags:                                      # Tags are an example of a sequence of mappings in YAML,
         -                                        # each key/value pair is separated by a hyphen
           Key: Name
           Value: dbWebAppStack
@@ -167,5 +167,12 @@ Resources:
           Key: Purpose
           Value: WebAppStack RDS instance
  
+ DBSecurityGroup:
+  Type: AWS::RDS::DBSecurityGroup
+  Properties:
+    DBSecurityGroupIngress:
+      EC2SecurityGroupName:
+        Ref: SecurityGroupIDs
+    GroupDescription: Frontend Access
     
  

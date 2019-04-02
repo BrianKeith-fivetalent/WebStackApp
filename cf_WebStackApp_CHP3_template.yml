@@ -123,24 +123,49 @@ Resources:
         UnhealthyThreshold: '5'
         Interval: '30'
         Timeout: '5'
-      # Tags:                                      # Tags are an example of a sequence of mappings in YAML,
-      #   -                                        # each key/value pair is separated by a hyphen
-      #     Key: Name
-      #     Value: elbWebAppStack     
-      #   -
-      #     Key: Environment
-      #     Value: Development
-      #   -
-      #     Key: CreatedBy
-      #     Value: Brian Keith
-      #   - 
-      #     Key: CreatedDate
-      #     Value: !Ref CreationDate
-      #   - 
-      #     Key: Purpose
-      #     Value: WebAppStack Load Balancer
-
-
+      Tags:                                      # Tags are an example of a sequence of mappings in YAML,
+        -                                        # each key/value pair is separated by a hyphen
+          Key: Name
+          Value: elbWebAppStack     
+        -
+          Key: Environment
+          Value: Development
+        -
+          Key: CreatedBy
+          Value: Brian Keith
+        - 
+          Key: CreatedDate
+          Value: !Ref CreationDate
+        - 
+          Key: Purpose
+          Value: WebAppStack Load Balancer
+#Add A multizone RDS instance
+  MyDBSmall:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.t2.micro
+      Engine: MySQL
+      DBSecurityGroups: !Ref SecurityGroupIDs
+      AllocatedStorage: '5'
+      MasterUsername: MyName
+      MasterUserPassword: MyPassword
+      MultiAZ: true
+    Tags:                                      # Tags are an example of a sequence of mappings in YAML,
+        -                                        # each key/value pair is separated by a hyphen
+          Key: Name
+          Value: dbWebAppStack
+        -
+          Key: Environment
+          Value: Development
+        -
+          Key: CreatedBy
+          Value: Brian Keith
+        - 
+          Key: CreatedDate
+          Value: !Ref CreationDate
+        - 
+          Key: Purpose
+          Value: WebAppStack RDS instance
  
     
  

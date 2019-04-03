@@ -66,37 +66,33 @@ Resources:
 # NOTE: restricts app access to a few action - PutItem, GetItem, UpdateItem
 
 #DynamoDB
-#NOTE: must createa  table in teh North Virginia (US-EAST-1) region with name 'sessions' and primary key 'id'
+#NOTE: must createa  table in the North Virginia (US-EAST-1) region with name 'sessions' and primary key 'id'
   MyDynamoTable:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - 
-          AttributeName: "sessions"
-          AttributeType: "S"
-        -
           AttributeName: "id"
           AttributeType: "S"
   #BillingMode: PROVISIONED
   #GlobalSecondaryIndexes:
   #  - GlobalSecondaryIndexes
-       KeySchema:
-          AttributeName: "id"
-          AttributeType: "hash"
+      KeySchema:
+        AttributeName: "id"
+        AttributeType: "hash"
   #LocalSecondaryIndexes:
   #  - LocalSecondaryIndexes
   #PointInTimeRecoverySpecification: 
   #  PointInTimeRecoverySpecification: "False"
-        ProvisionedThroughput:
-          ReadCapacityUnits: "5"
-          WriteCapacityUnits: "5"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "5"
+        WriteCapacityUnits: "5"
   #SSESpecification:
   #  SSESpecification: "False"
   #StreamSpecification:
   #  StreamSpecification
       TableName: sessions
-      Tags:                                      # Tags are an example of a sequence of mappings in YAML,
-      -                                        # each key/value pair is separated by a hyphen
+      Tags:                                    
+      -                                        
         Key: Name
         Value: tblsessions      
       -
@@ -114,9 +110,9 @@ Resources:
   #TimeToLiveSpecification: 
   #  TimeToLiveSpecification
 
-
 #Multizone RDS Instance
 
-
-
-#Outputs:
+Outputs:
+  TableName:
+    Value: !Ref 'MyDynamoTable'
+    Description: Table name of the newly created DynamoDB table

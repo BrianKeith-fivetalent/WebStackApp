@@ -67,48 +67,61 @@ Resources:
 
 #DynamoDB
 #NOTE: must createa  table in the North Virginia (US-EAST-1) region with name 'sessions' and primary key 'id'
-  MyDynamoTable:
+
+  myDynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        -
-          AttributeName: "id"
-          AttributeType: "S"
+      - AttributeName: "id"
+        AttributeType: S
+      KeySchema:
+      - AttributeName: "id"
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  # MyDynamoTable:
+  #   Type: AWS::DynamoDB::Table
+  #   Properties:
+  #     AttributeDefinitions:
+  #       -
+  #         AttributeName: "id"
+  #         AttributeType: "S"
   #BillingMode: PROVISIONED
   #GlobalSecondaryIndexes:
   #  - GlobalSecondaryIndexes
-      KeySchema:
-        -
-          AttributeName: "id"
-          AttributeType: "hash"
+      # KeySchema:
+      #   -
+      #     AttributeName: "id"
+      #     AttributeType: "hash"
   #LocalSecondaryIndexes:
   #  - LocalSecondaryIndexes
   #PointInTimeRecoverySpecification: 
   #  PointInTimeRecoverySpecification: "False"
-      ProvisionedThroughput:
-        ReadCapacityUnits: "5"
-        WriteCapacityUnits: "5"
+      # ProvisionedThroughput:
+      #   ReadCapacityUnits: "5"
+      #   WriteCapacityUnits: "5"
   #SSESpecification:
   #  SSESpecification: "False"
   #StreamSpecification:
   #  StreamSpecification
-      TableName: sessions
-      Tags:                                    
-      -                                        
-        Key: Name
-        Value: tblsessions      
-      -
-        Key: Environment
-        Value: Development
-      -
-        Key: CreatedBy
-        Value: Brian Keith
-      - 
-        Key: CreatedDate
-        Value: CreationDate
-      - 
-        Key: Purpose
-        Value: DynamoDB tables for session data. WebAppStack chapter 4
+      # TableName: sessions
+      # Tags:                                    
+      # -                                        
+      #   Key: Name
+      #   Value: tblsessions      
+      # -
+      #   Key: Environment
+      #   Value: Development
+      # -
+      #   Key: CreatedBy
+      #   Value: Brian Keith
+      # - 
+      #   Key: CreatedDate
+      #   Value: CreationDate
+      # - 
+      #   Key: Purpose
+      #   Value: DynamoDB tables for session data. WebAppStack chapter 4
   #TimeToLiveSpecification: 
   #  TimeToLiveSpecification
 
@@ -116,5 +129,7 @@ Resources:
 
 Outputs:
   TableName:
-    Value: !Ref 'MyDynamoTable'
+    Value: !Ref 'myDynamoDBTable'
     Description: Table name of the newly created DynamoDB table
+
+

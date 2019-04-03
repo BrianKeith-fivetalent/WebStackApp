@@ -6,7 +6,7 @@ Description: This template is used with Chp 4 in the book build scalable web app
 # Book by Savitra Sirohi
 # KEYS: Centralize sessions in DynamoDB, Create IAM role to allow the app to access DynamoDB, set up auto-scaling group behind a load balancer
 
-Metadata: 
+#Metadata: 
 
 Parameters: 
   # SubnetIDA:
@@ -42,7 +42,7 @@ Mappings:
     us-east-2:
       AMIID: ami-0fbe919e06f97301e      #Uses a custom Ubuntu AMI with a php applications
 
-Conditions: 
+#Conditions: 
 
 Resources: 
 #
@@ -75,14 +75,14 @@ Properties:
       AttributeType: "S"
     -
       AttributeName: "id"
-      AttributeType: "N"
+      AttributeType: "S"
   BillingMode: PROVISIONED
   #GlobalSecondaryIndexes:
   #  - GlobalSecondaryIndexes
   KeySchema:
     - 
       AttributeName: "id"
-      AttributeType: "RANGE"
+      AttributeType: "hash"
   #LocalSecondaryIndexes:
   #  - LocalSecondaryIndexes
   PointInTimeRecoverySpecification: 
@@ -107,7 +107,7 @@ Properties:
       Value: Brian Keith
     - 
       Key: CreatedDate
-      Value: !Ref CreationDate
+      Value: CreationDate
     - 
       Key: Purpose
       Value: DynamoDB tables for session data. WebAppStack chapter 4
@@ -119,4 +119,4 @@ Properties:
 
 
 
-Outputs:
+#Outputs:

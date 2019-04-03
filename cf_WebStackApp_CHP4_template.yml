@@ -71,14 +71,16 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
+        -
           AttributeName: "id"
           AttributeType: "S"
   #BillingMode: PROVISIONED
   #GlobalSecondaryIndexes:
   #  - GlobalSecondaryIndexes
       KeySchema:
-        AttributeName: "id"
-        AttributeType: "hash"
+        -
+          AttributeName: "id"
+          AttributeType: "hash"
   #LocalSecondaryIndexes:
   #  - LocalSecondaryIndexes
   #PointInTimeRecoverySpecification: 

@@ -8,7 +8,7 @@ Description: This template is used with Chp 4 in the book build scalable web app
 
 #Metadata: 
 
-Parameters: 
+#Parameters: 
   # SubnetIDA:
   #   Type: AWS::EC2::Subnet::Id
   #   Description: Subnet A to deploy EC2 instance into
@@ -35,12 +35,12 @@ Parameters:
   #   Type: String
   #   Default: application
 
-Mappings: 
-  AWSRegionToAMI:
-    us-east-1:
-      AMIID: ami-0fbe919e06f97301e      #Uses a custom Ubuntu AMI with a php applications
-    us-east-2:
-      AMIID: ami-0fbe919e06f97301e      #Uses a custom Ubuntu AMI with a php applications
+#Mappings: 
+#  AWSRegionToAMI:
+#    us-east-1:
+#      AMIID: ami-0fbe919e06f97301e      #Uses a custom Ubuntu AMI with a php applications
+#    us-east-2:
+#      AMIID: ami-0fbe919e06f97301e      #Uses a custom Ubuntu AMI with a php applications
 
 #Conditions: 
 
@@ -67,50 +67,50 @@ Resources:
 
 #DynamoDB
 #NOTE: must createa  table in teh North Virginia (US-EAST-1) region with name 'sessions' and primary key 'id'
-Type: AWS::DynamoDB::Table
-Properties:
-  AttributeDefinitions:
-    - 
-      AttributeName: "sessions"
-      AttributeType: "S"
-    -
-      AttributeName: "id"
-      AttributeType: "S"
-  BillingMode: PROVISIONED
+  MyDynamoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "sessions"
+          AttributeType: "S"
+        -
+          AttributeName: "id"
+          AttributeType: "S"
+  #BillingMode: PROVISIONED
   #GlobalSecondaryIndexes:
   #  - GlobalSecondaryIndexes
-  KeySchema:
-    - 
-      AttributeName: "id"
-      AttributeType: "hash"
+       KeySchema:
+          AttributeName: "id"
+          AttributeType: "hash"
   #LocalSecondaryIndexes:
   #  - LocalSecondaryIndexes
-  PointInTimeRecoverySpecification: 
-    PointInTimeRecoverySpecification: "False"
-  ProvisionedThroughput:
-    ReadCapacityUnits: "5"
-    WriteCapacityUnits: "5"
-  SSESpecification:
-    SSESpecification: "False"
+  #PointInTimeRecoverySpecification: 
+  #  PointInTimeRecoverySpecification: "False"
+        ProvisionedThroughput:
+          ReadCapacityUnits: "5"
+          WriteCapacityUnits: "5"
+  #SSESpecification:
+  #  SSESpecification: "False"
   #StreamSpecification:
   #  StreamSpecification
-  TableName: sessions
-  Tags:                                      # Tags are an example of a sequence of mappings in YAML,
-    -                                        # each key/value pair is separated by a hyphen
-      Key: Name
-      Value: tblsessions      
-    -
-      Key: Environment
-      Value: Development
-    -
-      Key: CreatedBy
-      Value: Brian Keith
-    - 
-      Key: CreatedDate
-      Value: CreationDate
-    - 
-      Key: Purpose
-      Value: DynamoDB tables for session data. WebAppStack chapter 4
+      TableName: sessions
+      Tags:                                      # Tags are an example of a sequence of mappings in YAML,
+      -                                        # each key/value pair is separated by a hyphen
+        Key: Name
+        Value: tblsessions      
+      -
+        Key: Environment
+        Value: Development
+      -
+        Key: CreatedBy
+        Value: Brian Keith
+      - 
+        Key: CreatedDate
+        Value: CreationDate
+      - 
+        Key: Purpose
+        Value: DynamoDB tables for session data. WebAppStack chapter 4
   #TimeToLiveSpecification: 
   #  TimeToLiveSpecification
 

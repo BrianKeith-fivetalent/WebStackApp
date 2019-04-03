@@ -1,13 +1,122 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: ---
+Description: This template is used with Chp 4 in the book build scalable web apps
+# Chapter 4: Scalability in App Layer
+# Brian Keith
+# 02 APR 2019
+# Book by Savitra Sirohi
+# KEYS: Centralize sessions in DynamoDB, Create IAM role to allow the app to access DynamoDB, set up auto-scaling group behind a load balancer
+
 Metadata: 
 
 Parameters: 
+  # SubnetIDA:
+  #   Type: AWS::EC2::Subnet::Id
+  #   Description: Subnet A to deploy EC2 instance into
+  # SubnetIDB:
+  #   Type: AWS::EC2::Subnet::Id
+  #   Description: Subnet B to deploy EC2 instance into
+  # SecurityGroupIDs:
+  #   Type: List<AWS::EC2::SecurityGroup::Id>
+  #   Description: List of Security Groups to add to EC2 instance
+  # KeyName:
+  #   Type: AWS::EC2::KeyPair::KeyName
+  #   Description: Name of an existing EC2 KeyPair to enable SSH access to the 
+  #   Default: WebAppStackKeyPair
+  # InstanceType:
+  #   Description: EC2 instance type
+  #   Type: String
+  #   Default: t2.micro
+  # CreationDate:
+  #   Description: Enter today's Date for tagging purposes
+  #   Type: String
+  #   Default: "01 APR 2019"
+  # ELBType:
+  #   Description: The type of Elastic LoadBalancer
+  #   Type: String
+  #   Default: application
 
 Mappings: 
+  AWSRegionToAMI:
+    us-east-1:
+      AMIID: ami-0fbe919e06f97301e      #Uses a custom Ubuntu AMI with a php applications
+    us-east-2:
+      AMIID: ami-0fbe919e06f97301e      #Uses a custom Ubuntu AMI with a php applications
 
 Conditions: 
 
 Resources: 
+#
+#EC2 Instance ONE
+
+#
+#EC2 Instance TWO
+
+#
+#Elastic Load Balancer
+
+#
+#AutoScaling Group
+
+#
+# IAM Role
+# NOTE: Test the  DynamoDB sessions page and IAM role from a single EC2 instance first
+
+#
+# IAM custom policy
+# NOTE: restricts app access to a few action - PutItem, GetItem, UpdateItem
+
+#DynamoDB
+#NOTE: must createa  table in teh North Virginia (US-EAST-1) region with name 'sessions' and primary key 'id'
+Type: AWS::DynamoDB::Table
+Properties:
+  AttributeDefinitions:
+    - 
+      AttributeName: "sessions"
+      AttributeType: "S"
+    -
+      AttributeName: "id"
+      AttributeType: "N"
+  BillingMode: PROVISIONED
+  #GlobalSecondaryIndexes:
+  #  - GlobalSecondaryIndexes
+  KeySchema:
+    - 
+      AttributeName: "id"
+      AttributeType: "RANGE"
+  #LocalSecondaryIndexes:
+  #  - LocalSecondaryIndexes
+  PointInTimeRecoverySpecification: 
+    PointInTimeRecoverySpecification: "False"
+  ProvisionedThroughput:
+    ReadCapacityUnits: "5"
+    WriteCapacityUnits: "5"
+  SSESpecification:
+    SSESpecification: "False"
+  #StreamSpecification:
+  #  StreamSpecification
+  TableName: sessions
+  Tags:                                      # Tags are an example of a sequence of mappings in YAML,
+    -                                        # each key/value pair is separated by a hyphen
+      Key: Name
+      Value: tblsessions      
+    -
+      Key: Environment
+      Value: Development
+    -
+      Key: CreatedBy
+      Value: Brian Keith
+    - 
+      Key: CreatedDate
+      Value: !Ref CreationDate
+    - 
+      Key: Purpose
+      Value: DynamoDB tables for session data. WebAppStack chapter 4
+  #TimeToLiveSpecification: 
+  #  TimeToLiveSpecification
+
+
+#Multizone RDS Instance
+
+
 
 Outputs:

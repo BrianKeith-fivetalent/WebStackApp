@@ -60,7 +60,30 @@ Resources:
 #
 # IAM Role
 # NOTE: Test the  DynamoDB sessions page and IAM role from a single EC2 instance first
-
+DynamoFullAccessRole:
+Type: "AWS::IAM::Role"
+  Properties: 
+    AssumeRolePolicyDocument: 
+      Version: "2012-10-17"
+      Statement: 
+        - 
+        Effect: "Allow"
+        Principal: 
+          Service: 
+            - "ec2.amazonaws.com"
+            Action: 
+            - "sts:AssumeRole"
+        Path: "/"
+    Policies: 
+      - 
+        PolicyName: "DyanamoDBFullAccess"
+        PolicyDocument: 
+          Version: "2012-10-17"
+          Statement: 
+            - 
+              Effect: "Allow"
+              Action: "*"
+              Resource: "*"
 #
 # IAM custom policy
 # NOTE: restricts app access to a few action - PutItem, GetItem, UpdateItem
@@ -80,13 +103,6 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
-  # MyDynamoTable:
-  #   Type: AWS::DynamoDB::Table
-  #   Properties:
-  #     AttributeDefinitions:
-  #       -
-  #         AttributeName: "id"
-  #         AttributeType: "S"
   #BillingMode: PROVISIONED
   #GlobalSecondaryIndexes:
   #  - GlobalSecondaryIndexes

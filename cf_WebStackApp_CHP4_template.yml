@@ -60,30 +60,29 @@ Resources:
 #
 # IAM Role
 # NOTE: Test the  DynamoDB sessions page and IAM role from a single EC2 instance first
-DynamoFullAccessRole:
-Type: "AWS::IAM::Role"
-  Properties: 
-    AssumeRolePolicyDocument: 
-      Version: "2012-10-17"
-      Statement: 
-        - 
-        Effect: "Allow"
-        Principal: 
-          Service: 
-            - "ec2.amazonaws.com"
+  DynamoDBRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
             Action: 
-            - "sts:AssumeRole"
-        Path: "/"
-    Policies: 
-      - 
-        PolicyName: "DyanamoDBFullAccess"
-        PolicyDocument: 
-          Version: "2012-10-17"
-          Statement: 
-            - 
-              Effect: "Allow"
-              Action: "*"
-              Resource: "*"
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+  DynamoDBInstanceProfile: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Path: "/"
+      Roles: 
+        - 
+          Ref: "DynamoDBRole"
 #
 # IAM custom policy
 # NOTE: restricts app access to a few action - PutItem, GetItem, UpdateItem

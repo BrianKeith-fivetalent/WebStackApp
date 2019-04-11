@@ -16,7 +16,7 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
     Description: Subnet B to deploy EC2 instance into and Load Balancer
   SecurityGroupIDs:
-    Type: List<AWS::EC2::SecurityGroup::Id>
+    Type: AWS::EC2::SecurityGroup::Id
     Description: List of Security Groups to add to EC2 instance
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
@@ -44,7 +44,22 @@ Mappings:
 
 #Conditions: 
 
-Resources: 
+Resources:
+#This security group allows us to whitelist traffic from the internet to our load balancer
+  # LoadBalancerSG: 
+  #   Type: "AWS::EC2::SecurityGroup"
+  #   Properties:
+  #     GroupDescription: "Load balancer security group"     
+  #     SecurityGroupIngress:
+  #       - IpProtocol: "tcp"
+  #         CidrIp: "0.0.0.0/0"
+  #         FromPort: 80
+  #         ToPort: 80
+  #       - IpProtocol: "tcp"
+  #         CidrIp: "0.0.0.0/0"
+  #         FromPort: 443
+  #         ToPort: 443
+
 #
 #EC2 Instance ONE
   EC2InstanceA:
@@ -87,18 +102,14 @@ Resources:
   lbWebAppStack:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      IpAddressType: Ipv4
-      # LoadBalancerAttributes:
-      #   -
       Name: lbWebAppStack
-      Scheme: internet-facing
-      SecurityGroups:
-        - !Ref SecurityGroupIDs
-      # SubnetMappings:
-      #   - SubnetMapping
       Subnets:
         - !Ref SubnetIDA
         - !Ref SubnetIDB
+      SecurityGroups:
+        -!Ref SecurityGroupIDs
+      Type: 
+        - !Ref ELBType 
       Tags:
         -
           Key: Environment
@@ -112,11 +123,9 @@ Resources:
         - 
           Key: Purpose
           Value: WebAppStack first instance
-      Type: Ref!: ELBType 
-
+      
 #
 #AutoScaling Group
-
 #
 # IAM Role
 # NOTE: Test the  DynamoDB sessions page and IAM role from a single EC2 instance first

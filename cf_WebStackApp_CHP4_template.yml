@@ -133,6 +133,7 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      TableName: sessions
   #BillingMode: PROVISIONED
   #GlobalSecondaryIndexes:
   #  - GlobalSecondaryIndexes
@@ -150,24 +151,23 @@ Resources:
   #SSESpecification:
   #  SSESpecification: "False"
   #StreamSpecification:
-  #  StreamSpecification
-      # TableName: sessions
-      # Tags:                                    
-      # -                                        
-      #   Key: Name
-      #   Value: tblsessions      
-      # -
-      #   Key: Environment
-      #   Value: Development
-      # -
-      #   Key: CreatedBy
-      #   Value: Brian Keith
-      # - 
-      #   Key: CreatedDate
-      #   Value: CreationDate
-      # - 
-      #   Key: Purpose
-      #   Value: DynamoDB tables for session data. WebAppStack chapter 4
+  # StreamSpecification
+    # Tags:                                    
+    #   -                                        
+    #     Key: Name
+    #     Value: sessions      
+    #   -
+    #     Key: Environment
+    #     Value: Development
+    #   -
+    #     Key: CreatedBy
+    #     Value: Brian Keith
+    #   - 
+    #     Key: CreatedDate
+    #     Value: CreationDate
+    #   - 
+    #     Key: Purpose
+    #     Value: DynamoDB tables for session data. WebAppStack chapter 4
   #TimeToLiveSpecification: 
   #  TimeToLiveSpecification
 
@@ -178,4 +178,9 @@ Outputs:
     Value: !Ref 'myDynamoDBTable'
     Description: Table name of the newly created DynamoDB table
 
+  # EC2InstanceOne:
+  #   Value: Fn::GetAtt: "EC2InstanceA", "PublicIp"
+  #   Description: The public IP of the first EC2 instance.
 
+   
+  

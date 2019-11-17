@@ -18,6 +18,9 @@ Description: "Deploy the web application stack from chp 3"
 #
 
 Parameters:
+  StackVPC:
+    Type: AWS::EC2::VPC::Id
+    Description: The target VPC
   SubnetIDA:
     Type: AWS::EC2::Subnet::Id
     Description: Subnet A to deploy EC2 instance into
@@ -116,41 +119,78 @@ Resources:
           Key: Purpose
           Value: WebAppStack second instance
 
-# Add an Application Load Balancer
-  elbWebAppStack:
-    Type: AWS::ElasticLoadBalancing::LoadBalancer
+#Createan ALB with TargetGroup and Listener
+  ApplicationLoadBalancer:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
     Properties:
-      AvailabilityZones:
-        Fn::GetAZs: ''
-      Instances: 
-        - Ref: EC2InstanceA
-        - Ref: EC2InstanceB
-      Listeners:
-      - LoadBalancerPort: '80'
-        InstancePort: '80'
-        Protocol: HTTP
-      HealthCheck:
-        Target: HTTP:80/
-        HealthyThreshold: '3'
-        UnhealthyThreshold: '5'
-        Interval: '30'
-        Timeout: '5'
-      Tags:                                      # Tags are an example of a sequence of mappings in YAML,
-        -                                        # each key/value pair is separated by a hyphen
-          Key: Name
-          Value: elbWebAppStack     
-        -
-          Key: FTSEnvironment
-          Value: Development
-        -
-          Key: FTSArchitect
-          Value: Brian Keith
-        - 
-          Key: FTSCreatedDate
-          Value: !Ref CreationDate
-        - 
-          Key: FTSDescription
-          Value: WebAppStack Load Balancer
+      Subnets: [!Ref SubnetIDA, !Ref SubnetIDB]
+
+  ALBListener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref ALBTargetGroup
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: '80'
+      Protocol: HTTP
+  ALBTargetGroup:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      HealthCheckPath: /
+      HealthCheckIntervalSeconds: 10
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: !Ref StackVPC
+      TargetType: instance
+      Targets: [EC2InstanceA, EC2InstanceB]
+      # TargetGroupAttributes:
+      #   - Key: stickiness.enabled
+      #     Value: 'true'
+      #   - Key: stickiness.type
+      #     Value: lb_cookie
+      #   - Key: stickiness.lb_cookie.duration_seconds
+      #     Value: '30'
+
+# # Add an Application Load Balancer
+#   elbWebAppStack:
+#     Type: AWS::ElasticLoadBalancing::LoadBalancer
+#     Properties:
+#       AvailabilityZones:
+#         Fn::GetAZs: ''
+#       Instances: 
+#         - Ref: EC2InstanceA
+#         - Ref: EC2InstanceB
+#       Listeners:
+#       - LoadBalancerPort: '80'
+#         InstancePort: '80'
+#         Protocol: HTTP
+#       HealthCheck:
+#         Target: HTTP:80/
+#         HealthyThreshold: '3'
+#         UnhealthyThreshold: '5'
+#         Interval: '30'
+#         Timeout: '5'
+#       Tags:                                      # Tags are an example of a sequence of mappings in YAML,
+#         -                                        # each key/value pair is separated by a hyphen
+#           Key: Name
+#           Value: elbWebAppStack     
+#         -
+#           Key: FTSEnvironment
+#           Value: Development
+#         -
+#           Key: FTSArchitect
+#           Value: Brian Keith
+#         - 
+#           Key: FTSCreatedDate
+#           Value: !Ref CreationDate
+#         - 
+#           Key: FTSDescription
+#           Value: WebAppStack Load Balancer
+
 #Add A multizone RDS instance
   DatabaseInstance:
     Type: AWS::RDS::DBInstance

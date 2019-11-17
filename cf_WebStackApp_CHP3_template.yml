@@ -1,5 +1,16 @@
 AWSTemplateFormatVersion: 2010-09-09
-#
+
+Description: "Deploy the web application stack from chp 3"
+# --------------------------------------------------------------------------------------
+#- Author: Brian Keith
+#- Date: 14 Nov 2019
+#- Name: cf_WebStackApp_CHP3_template.yml
+#- Description: Deploy 2 EC2s, load balancer, RDS Multi AZ
+#- Version: 0.1
+#- Purpose: From Chp 3 of Step by Step Build a fault tolerant web stack
+#----------------------------------------------------------------------------------------- 
+
+# Metadata: #
 #
 #
 #
@@ -27,7 +38,7 @@ Parameters:
   CreationDate:
     Description: Enter today's Date for tagging purposes
     Type: String
-    Default: "01 APR 2019"
+    Default: "16 NOV 2019"
   ELBType:
     Description: The type of Elastic LoadBalancer
     Type: String
@@ -129,16 +140,16 @@ Resources:
           Key: Name
           Value: elbWebAppStack     
         -
-          Key: Environment
+          Key: FTSEnvironment
           Value: Development
         -
-          Key: CreatedBy
+          Key: FTSArchitect
           Value: Brian Keith
         - 
-          Key: CreatedDate
+          Key: FTSCreatedDate
           Value: !Ref CreationDate
         - 
-          Key: Purpose
+          Key: FTSDescription
           Value: WebAppStack Load Balancer
 #Add A multizone RDS instance
   DatabaseInstance:
